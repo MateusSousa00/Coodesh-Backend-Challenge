@@ -5,18 +5,27 @@ services:
     image: mongo
     restart: always
     ports:
-      - 27017:27017
+      - ${DB_PORT}:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secretpassword
-      MONGO_INITDB_DATABASE: database
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
   backend:
+    image: node:18-alpine
     container_name: node
-    build:
-      context: .
-      dockerfile: Dockerfile  
+    restart: always
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src
+    working_dir: /usr/src
     env_file:
       - .env
     ports:
-      - 3000:3000
-    command: "yarn dev"
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: yarn dev
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"

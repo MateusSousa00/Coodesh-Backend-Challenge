@@ -1,3 +1,544 @@
 {
-  "init": "init"
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.3.0",
+    "title": "Backend Challenge 20230105",
+    "description": "Backend Challenge 20230105",
+    "termsOfService": "http://api_url/terms/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Get Detail from api",
+        "tags": ["API"],
+        "operationId": "default",
+        "parameters": [],
+        "requestBody": {
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "Detail from api.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detailFromApi"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid parameters",
+                  "code": "500",
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{code}": {
+      "get": {
+        "description": "Get one specific product by code",
+        "operationId": "get",
+        "tags": ["Product"],
+        "parameters": ["code"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/code"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response from product gotten",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User unauthorized",
+                  "code": "401",
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Product with this code: 1234 not found.",
+                  "code": "404",
+                  "error": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update database",
+        "operationId": "cron",
+        "tags": ["Product"],
+        "parameters": ["code"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/code"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Database Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User unauthorized",
+                  "code": "401",
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid parameters",
+                  "code": "500",
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific product.",
+        "operationId": "delete",
+        "tags": ["Product"],
+        "parameters": ["code"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/code"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Deleted product successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleted"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User unauthorized",
+                  "code": "401",
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid parameters",
+                  "code": "500",
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "Get all products",
+        "tags": ["Product"],
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "Gotten all products.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid parameters",
+                  "code": "500",
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "api-key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "code": {
+        "type": "number",
+        "example": 13458
+      },
+      "status": {
+        "type": "string",
+        "example": "trash",
+        "enum": ["trash", "draft", "published"]
+      },
+      "imported_t": {
+        "type": "string",
+        "example": "2020-02-07T16:00:00Z"
+      },
+      "url": {
+        "type": "string",
+        "example": "https://world.openfoodfacts.org/product/20221126"
+      },
+      "creator": {
+        "type": "string",
+        "example": "securita"
+      },
+      "created_t": {
+        "type": "number",
+        "example": 1415302075
+      },
+      "last_modified_t": {
+        "type": "number",
+        "example": 1415302075
+      },
+      "product_name": {
+        "type": "string",
+        "example": "Madalenas quadradas"
+      },
+      "quantity": {
+        "type": "string",
+        "example": "380 g (6 x 2 u.)"
+      },
+      "brands": {
+        "type": "string",
+        "example": "La Cestera"
+      },
+      "categories": {
+        "type": "string",
+        "example": "Lanches comida, Lanches doces, Biscoitos e Bolos, Bolos, Madalenas"
+      },
+      "labels": {
+        "type": "string",
+        "example": "Contem gluten, Contém derivados de ovos, Contém ovos"
+      },
+      "cities": {
+        "type": "string",
+        "example": "Rio de Janeiro"
+      },
+      "purchase_places": {
+        "type": "string",
+        "example": "Braga,Portugal"
+      },
+      "stores": {
+        "type": "string",
+        "example": "Lidl"
+      },
+      "ingredients_text": {
+        "type": "string",
+        "example": "farinha de trigo, açúcar, óleo vegetal de girassol, clara de ovo, ovo, humidificante (sorbitol), levedantes químicos (difosfato dissódico, hidrogenocarbonato de sódio), xarope de glucose-frutose, sal, aroma"
+      },
+      "traces": {
+        "type": "string",
+        "example": "Frutos de casca rija,Leite,Soja,Sementes de sésamo,Produtos à base de sementes de sésamo"
+      },
+      "serving_size": {
+        "type": "string",
+        "example": "madalena 31.7 g"
+      },
+      "serving_quantity": {
+        "type": "number",
+        "example": 31.7
+      },
+      "nutriscore_score": {
+        "type": "number",
+        "example": 17
+      },
+      "nutriscore_grade": {
+        "type": "string",
+        "example": "d"
+      },
+      "main_category": {
+        "type": "string",
+        "example": "en:madeleines"
+      },
+      "image_url": {
+        "type": "string",
+        "example": "https://static.openfoodfacts.org/images/products/20221126/front_pt.5.400.jpg"
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/code"
+          },
+          "status": {
+            "$ref": "#/components/schemas/status"
+          },
+          "imported_t": {
+            "$ref": "#/components/schemas/imported_t"
+          },
+          "url": {
+            "$ref": "#/components/schemas/url"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/creator"
+          },
+          "created_t": {
+            "$ref": "#/components/schemas/created_t"
+          },
+          "last_modified_t": {
+            "$ref": "#/components/schemas/last_modified_t"
+          },
+          "product_name": {
+            "$ref": "#/components/schemas/product_name"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/quantity"
+          },
+          "brands": {
+            "$ref": "#/components/schemas/brands"
+          },
+          "categories": {
+            "$ref": "#/components/schemas/categories"
+          },
+          "labels": {
+            "$ref": "#/components/schemas/labels"
+          },
+          "cities": {
+            "$ref": "#/components/schemas/cities"
+          },
+          "purchase_places": {
+            "$ref": "#/components/schemas/purchase_places"
+          },
+          "stores": {
+            "$ref": "#/components/schemas/stores"
+          },
+          "ingredients_text": {
+            "$ref": "#/components/schemas/ingredients_text"
+          },
+          "traces": {
+            "$ref": "#/components/schemas/traces"
+          },
+          "serving_size": {
+            "$ref": "#/components/schemas/serving_size"
+          },
+          "serving_quantity": {
+            "$ref": "#/components/schemas/serving_quantity"
+          },
+          "nutriscore_score": {
+            "$ref": "#/components/schemas/nutriscore_score"
+          },
+          "nutriscore_grade": {
+            "$ref": "#/components/schemas/nutriscore_grade"
+          },
+          "main_category": {
+            "$ref": "#/components/schemas/main_category"
+          },
+          "image_url": {
+            "$ref": "#/components/schemas/image_url"
+          }
+        },
+        "required": [
+          "code",
+          "status",
+          "imported_t",
+          "url",
+          "creator",
+          "created_t",
+          "last_modified_t",
+          "product_name",
+          "quantity",
+          "brands",
+          "categories",
+          "labels",
+          "cities",
+          "purchase_places",
+          "stores",
+          "ingredients_text",
+          "traces",
+          "serving_size",
+          "serving_quantity",
+          "nutriscore_score",
+          "nutriscore_grade",
+          "main_category",
+          "image_url"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": null
+          },
+          "message": {
+            "type": "string",
+            "example": "Error in controller"
+          },
+          "error_code": {
+            "type": "string",
+            "example": "INTERNAL_SERVER_ERROR"
+          }
+        }
+      },
+      "deleted": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "example": "Deleted Successfully."
+          }
+        }
+      },
+      "updated": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "example": "Updated Successfully."
+          }
+        }
+      },
+      "detailFromApi": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Coodesh Backend Challenge 2023 Details!"
+          },
+          "lastCronRun": {
+            "type": "string",
+            "example": "Sat Jul 02 2023 09:00:00 GMT+0000 (Coordinated Universal Time)"
+          },
+          "uptime": {
+            "type": "string",
+            "example": "12h 30m 15s"
+          },
+          "memoryUsage": {
+            "type": "object",
+            "properties": {
+              "rss": {
+                "type": "number",
+                "example": 7435264
+              },
+              "heapTotal": {
+                "type": "number",
+                "example": 2400256
+              },
+              "heapUsed": {
+                "type": "number",
+                "example": 1590416
+              },
+              "external": {
+                "type": "number",
+                "example": 8272
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
