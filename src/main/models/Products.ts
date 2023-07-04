@@ -27,7 +27,7 @@ export interface IProduct {
   image_url: string;
 }
 
-const ProductSchema = new mongoose.Schema({
+export const ProductSchema = new mongoose.Schema({
   code: {
     type: Number,
     required: true,
@@ -121,6 +121,10 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  fieldToIndex: { type: String, index: true },
 });
+
+ProductSchema.index({ fieldToIndex: 1 });
 
 export const Product = mongoose.model("Product", ProductSchema);

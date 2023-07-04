@@ -1,19 +1,25 @@
-import { job } from "../config/cron";
+import { CronJob } from "cron";
 import { Request, Response } from "express";
 import os from "os";
 
 export class DefaultController {
-  constructor() {}
+  constructor(private job: CronJob) {}
 
   async handle(req: Request, res: Response) {
     try {
-      const lastCronRun = job.lastDate().toString();
+      let lastCronRun;
+      if (this.job.running) {
+        lastCronRun = this.job.lastDate();
+      } else {
+        lastCronRun = "Job has not executed yet";
+      }
+
       const uptime = await this.formatUptime(os.uptime());
       const memoryUsage = process.memoryUsage();
 
       const response = {
         message: "Coodesh backend challenge 2023 Details!",
-        lastCronRun,
+        lastTimeCronUsed: lastCronRun,
         uptime,
         memoryUsage,
       };

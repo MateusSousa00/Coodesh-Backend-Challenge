@@ -6,4 +6,6 @@ const mongoURI = `mongodb://${ENVS.DB_USER}:${ENVS.DB_PASS}@${ENVS.DB_HOST}:${EN
 mongoose.connect(mongoURI);
 
 mongoose.connection.on("error", () => console.error("connection error:"));
-mongoose.connection.once("open", () => console.log("database connected"));
+mongoose.connection.once("open", () => {
+  console.log("database connected");
+});

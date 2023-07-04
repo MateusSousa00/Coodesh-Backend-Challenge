@@ -8,12 +8,14 @@ import {
 } from "../controllers";
 import { ProductService } from "../services/product";
 import { updateDatabase } from "../config/cron";
+import { CronJob } from "cron";
 
 export const routes = Router();
 export const service = new ProductService();
+const job = new CronJob("0 9 * * *", updateDatabase);
 
 //controllers
-const serverStarted = new DefaultController();
+const serverStarted = new DefaultController(job);
 const deleteProduct = new DeleteController(service);
 const getOneProduct = new GetController(service);
 const getAllProduct = new GetAllController(service);
@@ -24,7 +26,7 @@ async function makeDefaultController(req: Request, res: Response) {
 }
 
 async function makeUpdateController(req: Request, res: Response) {
-  return await updateDatabase(req, res);
+  return await updateDatabase();
 }
 
 async function makeDeleteController(req: Request, res: Response) {

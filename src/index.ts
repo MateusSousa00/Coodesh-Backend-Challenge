@@ -3,7 +3,7 @@ import swagger from "swagger-ui-express";
 import swaggerFile from "./main/docs/swagger.json";
 import { routes } from "./routes/index";
 import { ENVS } from "./main/constants";
-import { job } from "./config/cron";
+import job from "./config/cron";
 import { authMiddleware } from "./routes/middleware";
 
 const app = express();
